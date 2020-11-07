@@ -1,0 +1,1146 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## 1. What is the Average Height of US Presidents?\n",
+    "\n",
+    "Aggregates available in NumPy can be extremely useful for summarizing a set of values.\n",
+    "As a simple example, let's consider the heights of all US presidents.\n",
+    "\n",
+    "This data is available in the file *president_heights.csv*, which is a simple comma-separated list of labels and values.\n",
+    "\n",
+    "Find the mean height, the standard deviation of height, and the president who is the smallest and tallest.\n",
+    "\n",
+    "You can use `pandas` to read in the file if you want, then cast the column to a `np.array`"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>order</th>\n",
+       "      <th>name</th>\n",
+       "      <th>height(cm)</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>1</td>\n",
+       "      <td>George Washington</td>\n",
+       "      <td>189</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1</th>\n",
+       "      <td>2</td>\n",
+       "      <td>John Adams</td>\n",
+       "      <td>170</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2</th>\n",
+       "      <td>3</td>\n",
+       "      <td>Thomas Jefferson</td>\n",
+       "      <td>189</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>3</th>\n",
+       "      <td>4</td>\n",
+       "      <td>James Madison</td>\n",
+       "      <td>163</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>4</th>\n",
+       "      <td>5</td>\n",
+       "      <td>James Monroe</td>\n",
+       "      <td>183</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "   order               name  height(cm)\n",
+       "0      1  George Washington         189\n",
+       "1      2         John Adams         170\n",
+       "2      3   Thomas Jefferson         189\n",
+       "3      4      James Madison         163\n",
+       "4      5       James Monroe         183"
+      ]
+     },
+     "execution_count": 2,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "import os\n",
+    "import pandas as pd\n",
+    "\n",
+    "os.getcwd()\n",
+    "os.listdir()\n",
+    "\n",
+    "data_fetch = '/Users/celiagoogle/Documents/GitHub/m1-6-numpy/data/president_heights.csv'\n",
+    "df = pd.read_csv(data_fetch)\n",
+    "df.head()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>order</th>\n",
+       "      <th>height(cm)</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>count</th>\n",
+       "      <td>42.000000</td>\n",
+       "      <td>42.000000</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>mean</th>\n",
+       "      <td>22.476190</td>\n",
+       "      <td>179.738095</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>std</th>\n",
+       "      <td>13.152461</td>\n",
+       "      <td>7.015869</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>min</th>\n",
+       "      <td>1.000000</td>\n",
+       "      <td>163.000000</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>25%</th>\n",
+       "      <td>11.250000</td>\n",
+       "      <td>174.250000</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>50%</th>\n",
+       "      <td>22.000000</td>\n",
+       "      <td>182.000000</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>75%</th>\n",
+       "      <td>33.750000</td>\n",
+       "      <td>183.000000</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>max</th>\n",
+       "      <td>44.000000</td>\n",
+       "      <td>193.000000</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "           order  height(cm)\n",
+       "count  42.000000   42.000000\n",
+       "mean   22.476190  179.738095\n",
+       "std    13.152461    7.015869\n",
+       "min     1.000000  163.000000\n",
+       "25%    11.250000  174.250000\n",
+       "50%    22.000000  182.000000\n",
+       "75%    33.750000  183.000000\n",
+       "max    44.000000  193.000000"
+      ]
+     },
+     "execution_count": 3,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "'''To see if my calculations\n",
+    "further below are correct.\n",
+    "The height std here is 7.015869'''\n",
+    "\n",
+    "df.describe()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "The height mean is 179.74 cm\n"
+     ]
+    }
+   ],
+   "source": [
+    "import numpy as np\n",
+    "\n",
+    "'''isolate the column'''\n",
+    "height_column = df.loc[:, 'height(cm)']\n",
+    "\n",
+    "'''turn the column into an array called\n",
+    "presidents_height'''\n",
+    "presidents_height = np.array(height_column)\n",
+    "\n",
+    "'''assign variable to the mean \n",
+    "to round it to 2 decimal points in the print function'''\n",
+    "\n",
+    "height_mean = np.mean(presidents_height)\n",
+    "\n",
+    "print(f\"The height mean is {round(height_mean,2)} cm\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "The height standard deviation is 6.931843442745893 cm\n"
+     ]
+    }
+   ],
+   "source": [
+    "''' Why is the calculated std different \n",
+    "from the value given with df.describe()?'''\n",
+    "\n",
+    "# presidents_height.std()\n",
+    "# np.std(height_column)\n",
+    "\n",
+    "print(f\"The height standard deviation is {np.std(height_column)} cm\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>order</th>\n",
+       "      <th>name</th>\n",
+       "      <th>height(cm)</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>15</th>\n",
+       "      <td>16</td>\n",
+       "      <td>Abraham Lincoln</td>\n",
+       "      <td>193</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>33</th>\n",
+       "      <td>36</td>\n",
+       "      <td>Lyndon B. Johnson</td>\n",
+       "      <td>193</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "    order               name  height(cm)\n",
+       "15     16    Abraham Lincoln         193\n",
+       "33     36  Lyndon B. Johnson         193"
+      ]
+     },
+     "execution_count": 6,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "'''used df format to get clear view\n",
+    "of both presidents and their height'''\n",
+    "\n",
+    "df[df['height(cm)'] == presidents_height.max()]"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 7,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>order</th>\n",
+       "      <th>name</th>\n",
+       "      <th>height(cm)</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>3</th>\n",
+       "      <td>4</td>\n",
+       "      <td>James Madison</td>\n",
+       "      <td>163</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "   order           name  height(cm)\n",
+       "3      4  James Madison         163"
+      ]
+     },
+     "execution_count": 7,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "'''used df format to get clear view\n",
+    "of president and their height'''\n",
+    "\n",
+    "df[df['height(cm)'] == presidents_height.min()]"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Exercise 2\n",
+    "\n",
+    "Recall the polynomial formula\n",
+    "\n",
+    "$$\n",
+    "p(x) = a_0 + a_1 x + a_2 x^2 + \\cdots a_N x^N = \\sum_{n=0}^N a_n x^n \\tag{1}\n",
+    "$$\n",
+    "\n",
+    "In the **math functions workshop**, you wrote a simple function `p(x, coeff)` to evaluate it without thinking about efficiency.\n",
+    "\n",
+    "Now write a new function that does the same job, but uses NumPy arrays and array operations for its computations, rather than any form of Python loop.\n",
+    "\n",
+    "(This is already implemented in `np.poly1d`, but use that only to test your function)\n",
+    "\n",
+    "- Hint: Use `np.cumprod()`  \n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "32"
+      ]
+     },
+     "execution_count": 8,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "'''My new polynomial function\n",
+    "with numpy'''\n",
+    "\n",
+    "def p(x, coeff):\n",
+    "    \n",
+    "    '''Setting up the nomials the length of coeff,\n",
+    "    with each at zero in the beginning'''\n",
+    "    X = np.ones_like(coeff)\n",
+    "    \n",
+    "    '''Assign value of x to each nomial, \n",
+    "    slicing from index 1 because x^0 == 1'''\n",
+    "    X[1:] = x \n",
+    "    \n",
+    "    '''exponents applied to x'''\n",
+    "    nomials = np.cumprod(X)\n",
+    "    \n",
+    "    '''Each nomial is multiplied by coeff\n",
+    "    and summed up for total'''\n",
+    "    total_nomials = sum(coeff * nomials)\n",
+    "    return total_nomials\n",
+    "\n",
+    "p(5, (2, 1, 1)) # output should be 32"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 9,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "This is the polynomial with\n",
+      "coefficients and exponents:\n",
+      "    2\n",
+      "1 x + 1 x + 2\n",
+      "\n",
+      "This is the output with x == 5:\n",
+      "32\n"
+     ]
+    }
+   ],
+   "source": [
+    "'''Testing with np.poly1d'''\n",
+    "import numpy as np\n",
+    "\n",
+    "#construct polynomial\n",
+    "p = np.poly1d([1,1,2]) # with x=5, out should be 32\n",
+    "print(f\"This is the polynomial with\\ncoefficients and exponents:\\n {p}\\n\")\n",
+    "\n",
+    "# Test\n",
+    "print(f\"This is the output with x == 5:\\n{p(5)}\") # output should be 32"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 10,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "32"
+      ]
+     },
+     "execution_count": 10,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "'''My polynomial function from \n",
+    "the Functions Workshop\n",
+    "as reference'''\n",
+    "\n",
+    "def p(x, coeff):\n",
+    "    each_coeff = []\n",
+    "    total_nomials = []\n",
+    "    each_coeff = coeff\n",
+    "    for index, value in enumerate(each_coeff):\n",
+    "        nomial = value * x ** index\n",
+    "        total_nomials.append(nomial)\n",
+    "    return sum(total_nomials)\n",
+    "\n",
+    "p(5, [2, 1, 1]) # output should be 32"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Exercise 3 Softmax\n",
+    "\n",
+    "Read in `data/iris.csv` and compute the [softmax]() of the sepal length. The formula for the softmax function $\\sigma(x)$ for a vector $x = \\{x_0, x_1, ..., x_{n-1}\\}$ is\n",
+    "    .$$\\sigma(x)_j = \\frac{e^{x_j}}{\\sum_k e^{x_k}}$$\n",
+    "\n",
+    "\n",
+    "Your result should be equal to the output of `scipy.special.softmax`"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 11,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>sepallength</th>\n",
+       "      <th>sepalwidth</th>\n",
+       "      <th>petallength</th>\n",
+       "      <th>petalwidth</th>\n",
+       "      <th>flower</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>5.1</td>\n",
+       "      <td>3.5</td>\n",
+       "      <td>1.4</td>\n",
+       "      <td>0.2</td>\n",
+       "      <td>Iris-setosa</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1</th>\n",
+       "      <td>4.9</td>\n",
+       "      <td>3.0</td>\n",
+       "      <td>1.4</td>\n",
+       "      <td>0.2</td>\n",
+       "      <td>Iris-setosa</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2</th>\n",
+       "      <td>4.7</td>\n",
+       "      <td>3.2</td>\n",
+       "      <td>1.3</td>\n",
+       "      <td>0.2</td>\n",
+       "      <td>Iris-setosa</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>3</th>\n",
+       "      <td>4.6</td>\n",
+       "      <td>3.1</td>\n",
+       "      <td>1.5</td>\n",
+       "      <td>0.2</td>\n",
+       "      <td>Iris-setosa</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>4</th>\n",
+       "      <td>5.0</td>\n",
+       "      <td>3.6</td>\n",
+       "      <td>1.4</td>\n",
+       "      <td>0.2</td>\n",
+       "      <td>Iris-setosa</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "   sepallength  sepalwidth  petallength  petalwidth       flower\n",
+       "0          5.1         3.5          1.4         0.2  Iris-setosa\n",
+       "1          4.9         3.0          1.4         0.2  Iris-setosa\n",
+       "2          4.7         3.2          1.3         0.2  Iris-setosa\n",
+       "3          4.6         3.1          1.5         0.2  Iris-setosa\n",
+       "4          5.0         3.6          1.4         0.2  Iris-setosa"
+      ]
+     },
+     "execution_count": 11,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "import os\n",
+    "import pandas as pd\n",
+    "\n",
+    "os.getcwd()\n",
+    "os.listdir()\n",
+    "\n",
+    "data_fetch = '/Users/celiagoogle/Documents/GitHub/m1-6-numpy/data/iris.csv'\n",
+    "df2 = pd.read_csv(data_fetch)\n",
+    "df2.head()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 13,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "[0.00221959 0.00181724 0.00148783 0.00134625 0.00200836 0.00299613\n",
+      " 0.00134625 0.00200836 0.00110221 0.00181724 0.00299613 0.00164431\n",
+      " 0.00164431 0.00099732 0.0044697  0.00404435 0.00299613 0.00221959\n",
+      " 0.00404435 0.00221959 0.00299613 0.00221959 0.00134625 0.00221959\n",
+      " 0.00164431 0.00200836 0.00200836 0.00245302 0.00245302 0.00148783\n",
+      " 0.00164431 0.00299613 0.00245302 0.00331123 0.00181724 0.00200836\n",
+      " 0.00331123 0.00181724 0.00110221 0.00221959 0.00200836 0.00121813\n",
+      " 0.00110221 0.00200836 0.00221959 0.00164431 0.00221959 0.00134625\n",
+      " 0.00271101 0.00200836 0.01483991 0.00814432 0.01342771 0.00331123\n",
+      " 0.00900086 0.00404435 0.00736928 0.00181724 0.00994749 0.00245302\n",
+      " 0.00200836 0.00493978 0.0054593  0.00603346 0.00365948 0.01099368\n",
+      " 0.00365948 0.0044697  0.006668   0.00365948 0.00493978 0.00603346\n",
+      " 0.00736928 0.00603346 0.00814432 0.00994749 0.01214989 0.01099368\n",
+      " 0.0054593  0.00404435 0.00331123 0.00331123 0.0044697  0.0054593\n",
+      " 0.00299613 0.0054593  0.01099368 0.00736928 0.00365948 0.00331123\n",
+      " 0.00331123 0.00603346 0.0044697  0.00200836 0.00365948 0.00404435\n",
+      " 0.00404435 0.006668   0.00221959 0.00404435 0.00736928 0.0044697\n",
+      " 0.01640064 0.00736928 0.00900086 0.02704008 0.00181724 0.02003179\n",
+      " 0.01099368 0.01812551 0.00900086 0.00814432 0.01214989 0.00404435\n",
+      " 0.0044697  0.00814432 0.00900086 0.02988391 0.02988391 0.0054593\n",
+      " 0.01342771 0.00365948 0.02988391 0.00736928 0.01099368 0.01812551\n",
+      " 0.006668   0.00603346 0.00814432 0.01812551 0.02213855 0.0365003\n",
+      " 0.00814432 0.00736928 0.00603346 0.02988391 0.00736928 0.00814432\n",
+      " 0.0054593  0.01342771 0.01099368 0.01342771 0.0044697  0.01214989\n",
+      " 0.01099368 0.01099368 0.00736928 0.00900086 0.006668   0.00493978]\n",
+      "0.9999999999999997\n"
+     ]
+    }
+   ],
+   "source": [
+    "#https://docs.scipy.org/doc/scipy/reference/generated/scipy.special.softmax.html\n",
+    "\n",
+    "'''isolate the column'''\n",
+    "sepal_length_column = df2.loc[:, 'sepallength']\n",
+    "\n",
+    "'''turn the column into an array called\n",
+    "s_length_arr'''\n",
+    "s_length_arr = np.array(sepal_length_column)\n",
+    "\n",
+    "\n",
+    "x = s_length_arr\n",
+    "softmax_sepallength = np.exp(x)/sum(np.exp(x))\n",
+    "\n",
+    "\n",
+    "'''output is equal to\n",
+    "the output of scipy.special.softmax'''\n",
+    "print(softmax_sepallength)\n",
+    "\n",
+    "\n",
+    "'''output is not exactly equal to\n",
+    "the output of scipy.special.softmax...\n",
+    "Rounding issue?'''\n",
+    "print(softmax_sepallength.sum()) "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 71,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "[0.00221959 0.00181724 0.00148783 0.00134625 0.00200836 0.00299613\n",
+      " 0.00134625 0.00200836 0.00110221 0.00181724 0.00299613 0.00164431\n",
+      " 0.00164431 0.00099732 0.0044697  0.00404435 0.00299613 0.00221959\n",
+      " 0.00404435 0.00221959 0.00299613 0.00221959 0.00134625 0.00221959\n",
+      " 0.00164431 0.00200836 0.00200836 0.00245302 0.00245302 0.00148783\n",
+      " 0.00164431 0.00299613 0.00245302 0.00331123 0.00181724 0.00200836\n",
+      " 0.00331123 0.00181724 0.00110221 0.00221959 0.00200836 0.00121813\n",
+      " 0.00110221 0.00200836 0.00221959 0.00164431 0.00221959 0.00134625\n",
+      " 0.00271101 0.00200836 0.01483991 0.00814432 0.01342771 0.00331123\n",
+      " 0.00900086 0.00404435 0.00736928 0.00181724 0.00994749 0.00245302\n",
+      " 0.00200836 0.00493978 0.0054593  0.00603346 0.00365948 0.01099368\n",
+      " 0.00365948 0.0044697  0.006668   0.00365948 0.00493978 0.00603346\n",
+      " 0.00736928 0.00603346 0.00814432 0.00994749 0.01214989 0.01099368\n",
+      " 0.0054593  0.00404435 0.00331123 0.00331123 0.0044697  0.0054593\n",
+      " 0.00299613 0.0054593  0.01099368 0.00736928 0.00365948 0.00331123\n",
+      " 0.00331123 0.00603346 0.0044697  0.00200836 0.00365948 0.00404435\n",
+      " 0.00404435 0.006668   0.00221959 0.00404435 0.00736928 0.0044697\n",
+      " 0.01640064 0.00736928 0.00900086 0.02704008 0.00181724 0.02003179\n",
+      " 0.01099368 0.01812551 0.00900086 0.00814432 0.01214989 0.00404435\n",
+      " 0.0044697  0.00814432 0.00900086 0.02988391 0.02988391 0.0054593\n",
+      " 0.01342771 0.00365948 0.02988391 0.00736928 0.01099368 0.01812551\n",
+      " 0.006668   0.00603346 0.00814432 0.01812551 0.02213855 0.0365003\n",
+      " 0.00814432 0.00736928 0.00603346 0.02988391 0.00736928 0.00814432\n",
+      " 0.0054593  0.01342771 0.01099368 0.01342771 0.0044697  0.01214989\n",
+      " 0.01099368 0.01099368 0.00736928 0.00900086 0.006668   0.00493978]\n",
+      "1.0000000000000007\n"
+     ]
+    }
+   ],
+   "source": [
+    "'''For testing purposes'''\n",
+    "#https://docs.scipy.org/doc/scipy/reference/generated/scipy.special.softmax.html\n",
+    "\n",
+    "from scipy.special import softmax\n",
+    "\n",
+    "x = s_length_arr\n",
+    "\n",
+    "m = softmax(x)\n",
+    "\n",
+    "print(m)\n",
+    "print(m.sum()) #Why is this different from softmax_sepallength.sum() above?"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Exercise 4: unique counts\n",
+    "\n",
+    "\n",
+    "Compute the counts of unique values row-wise.\n",
+    "\n",
+    "Input:\n",
+    "```\n",
+    "np.random.seed(100)\n",
+    "arr = np.random.randint(1,11,size=(6, 10))\n",
+    "arr\n",
+    "> array([[ 9,  9,  4,  8,  8,  1,  5,  3,  6,  3],\n",
+    ">        [ 3,  3,  2,  1,  9,  5,  1, 10,  7,  3],\n",
+    ">        [ 5,  2,  6,  4,  5,  5,  4,  8,  2,  2],\n",
+    ">        [ 8,  8,  1,  3, 10, 10,  4,  3,  6,  9],\n",
+    ">        [ 2,  1,  8,  7,  3,  1,  9,  3,  6,  2],\n",
+    ">        [ 9,  2,  6,  5,  3,  9,  4,  6,  1, 10]])\n",
+    "```\n",
+    "Desired Output:\n",
+    "```\n",
+    "> [[1, 0, 2, 1, 1, 1, 0, 2, 2, 0],\n",
+    ">  [2, 1, 3, 0, 1, 0, 1, 0, 1, 1],\n",
+    ">  [0, 3, 0, 2, 3, 1, 0, 1, 0, 0],\n",
+    ">  [1, 0, 2, 1, 0, 1, 0, 2, 1, 2],\n",
+    ">  [2, 2, 2, 0, 0, 1, 1, 1, 1, 0],\n",
+    ">  [1, 1, 1, 1, 1, 2, 0, 0, 2, 1]]\n",
+    "```\n",
+    "Output contains 10 columns representing numbers from 1 to 10. The values are the counts of the numbers in the respective rows.\n",
+    "For example, Cell(0,2) has the value 2, which means, the number 3 occurs exactly 2 times in the 1st row."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 14,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "This is the input:\n",
+      " [[ 9  9  4  8  8  1  5  3  6  3]\n",
+      " [ 3  3  2  1  9  5  1 10  7  3]\n",
+      " [ 5  2  6  4  5  5  4  8  2  2]\n",
+      " [ 8  8  1  3 10 10  4  3  6  9]\n",
+      " [ 2  1  8  7  3  1  9  3  6  2]\n",
+      " [ 9  2  6  5  3  9  4  6  1 10]]\n",
+      "\n",
+      "This is the desired output:\n",
+      "[[1 0 2 1 1 1 0 2 2 0]\n",
+      " [2 1 3 0 1 0 1 0 1 1]\n",
+      " [0 3 0 2 3 1 0 1 0 0]\n",
+      " [1 0 2 1 0 1 0 2 1 2]\n",
+      " [2 2 2 0 0 1 1 1 1 0]\n",
+      " [1 1 1 1 1 2 0 0 2 1]]\n"
+     ]
+    }
+   ],
+   "source": [
+    "'''The following computes\n",
+    "the counts of numbers\n",
+    "[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]\n",
+    "per row.\n",
+    "\n",
+    "Input is a 6 by 10 random seed array\n",
+    "\n",
+    "Output contains 10 columns representing numbers from 1 to 10.\n",
+    "The values are the counts of the numbers in the respective rows.\n",
+    "\n",
+    "'''\n",
+    "\n",
+    "import numpy as np\n",
+    "\n",
+    "np.random.seed(100)\n",
+    "arr = np.random.randint(1,11,size=(6, 10)) \n",
+    "print(f\"This is the input:\\n {arr}\")\n",
+    "\n",
+    "numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]\n",
+    "\n",
+    "empty = []\n",
+    "\n",
+    "for ele in numbers:\n",
+    "    for one_d in arr:\n",
+    "        if ele in one_d:\n",
+    "            x = one_d.tolist().count(ele)\n",
+    "            empty.append(x)\n",
+    "        else:\n",
+    "            empty.append(0)\n",
+    "            \n",
+    "new_arr = np.array(empty)\n",
+    "stack = new_arr.reshape(6,10, order='F')\n",
+    "\n",
+    "print(f\"\\nThis is the desired output:\\n{stack}\")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Exercise 5: One-Hot encodings\n",
+    "\n",
+    "Compute the one-hot encodings (AKA dummy binary variables) for each unique value in the array.\n",
+    "\n",
+    "Input:\n",
+    "```\n",
+    "np.random.seed(101) \n",
+    "arr = np.random.randint(1,4, size=6)\n",
+    "arr\n",
+    "#> array([2, 3, 2, 2, 2, 1])\n",
+    "```\n",
+    "Output:\n",
+    "```\n",
+    "#> array([[ 0.,  1.,  0.],\n",
+    "#>        [ 0.,  0.,  1.],\n",
+    "#>        [ 0.,  1.,  0.],\n",
+    "#>        [ 0.,  1.,  0.],\n",
+    "#>        [ 0.,  1.,  0.],\n",
+    "#>        [ 1.,  0.,  0.]])\n",
+    "```"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 42,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "[2 3 2 2 2 1]\n"
+     ]
+    },
+    {
+     "data": {
+      "text/plain": [
+       "array([[0., 1., 0.],\n",
+       "       [0., 0., 1.],\n",
+       "       [0., 1., 0.],\n",
+       "       [0., 1., 0.],\n",
+       "       [0., 1., 0.],\n",
+       "       [1., 0., 0.]])"
+      ]
+     },
+     "execution_count": 42,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "np.random.seed(101) \n",
+    "arr = np.random.randint(1,4, size=6)\n",
+    "print(arr)\n",
+    "               \n",
+    "out = np.zeros((arr.size, arr.max()+1))\n",
+    "out[np.arange(arr.size),arr] = 1\n",
+    "out[:,1:]\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Exercise 6\n",
+    "\n",
+    "Let `q` be a NumPy array of length `n` with `q.sum() == 1`.\n",
+    "\n",
+    "Suppose that `q` represents a [probability mass function](https://en.wikipedia.org/wiki/Probability_mass_function) over a statistical distribution. Recall that a distribution is an array of probabilities of events.\n",
+    "\n",
+    "We want to generate a discrete random variable $ x $ such that $ \\mathbb P\\{x = i\\} = q_i $.\n",
+    "\n",
+    "In other words, `x` takes values in `range(len(q))` and `x = i` with probability `q[i]`.\n",
+    "\n",
+    "The standard (inverse transform) algorithm is as follows:\n",
+    "\n",
+    "- Divide the unit interval $ [0, 1] $ into $ n $ subintervals $ I_0, I_1, \\ldots, I_{n-1} $ such that the length of $ I_i $ is $ q_i $.  \n",
+    "- Draw a uniform random variable $ U $ on $ [0, 1] $ and return the $ i $ such that $ U \\in I_i $.  \n",
+    "\n",
+    "\n",
+    "The probability of drawing $ i $ is the length of $ I_i $, which is equal to $ q_i $.\n",
+    "\n",
+    "We can implement the algorithm as follows\n",
+    "\n",
+    "```python\n",
+    "from random import uniform\n",
+    "\n",
+    "def sample(q):\n",
+    "    a = 0.0\n",
+    "    U = uniform(0, 1)\n",
+    "    for i in range(len(q)):\n",
+    "        if a < U <= a + q[i]:\n",
+    "            return i\n",
+    "        a = a + q[i]\n",
+    "```\n",
+    "\n",
+    "If you can’t see how this works, try thinking through the flow for a simple example, such as `q = [0.25, 0.75]`\n",
+    "It helps to sketch the intervals on paper.\n",
+    "\n",
+    "**Your exercise is to speed it up using NumPy, avoiding explicit loops**\n",
+    "\n",
+    "- Hint: Use `np.searchsorted` and `np.cumsum`  \n",
+    "\n",
+    "\n",
+    "If you can, implement the functionality as a class called `DiscreteRV`, where\n",
+    "\n",
+    "- the data for an instance of the class is the vector of probabilities `q`  \n",
+    "- the class has a `draw()` method, which returns one draw according to the algorithm described above  \n",
+    "\n",
+    "\n",
+    "If you can, write the method so that `draw(k)` returns `k` draws from `q`."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 16,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "1"
+      ]
+     },
+     "execution_count": 16,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "'''Help from:\n",
+    "https://python-programming.quantecon.org/numpy.html\n",
+    "\n",
+    "I'm not sure if this works,\n",
+    "or if it's entirely reliable\n",
+    "for all cases.'''\n",
+    "\n",
+    "\n",
+    "import numpy as np\n",
+    "from numpy import cumsum\n",
+    "from numpy.random import uniform\n",
+    "\n",
+    "class DiscreteRV:\n",
+    "    '''\n",
+    "    Create DiscreteRV class... \n",
+    "    '''\n",
+    "\n",
+    "    def __init__(self, q):\n",
+    "        '''...where the data for an instance of the class\n",
+    "        is the vector of probabilities q that sum to 1,\n",
+    "        initiated here as Q (cumsum of q)'''\n",
+    "        self.q = q\n",
+    "        self.Q = cumsum(q)\n",
+    "\n",
+    "    def draw(self):\n",
+    "        '''For each draw, the value i is returned\n",
+    "        with probability q[i] from searchsorted U.'''\n",
+    "    \n",
+    "        return self.Q.searchsorted(uniform(0, 1))\n",
+    "    \n",
+    "    \n",
+    "q = (0.1, 0.2, 0.3, 0.4)\n",
+    "\n",
+    "d = DiscreteRV(q)\n",
+    "d.draw()\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Exercise 7 Peaks\n",
+    "\n",
+    "Find all the peaks in a 1D numpy array a. Peaks are points surrounded by smaller values on both sides.\n",
+    "\n",
+    "Input:\n",
+    "```\n",
+    "a = np.array([1, 3, 7, 1, 2, 6, 0, 1])\n",
+    "```\n",
+    "Desired Output:\n",
+    "```\n",
+    "#> array([2, 5])\n",
+    "```\n",
+    "where, 2 and 5 are the positions of peak values 7 and 6.\n",
+    "\n",
+    "### 1. Solve this usign a regular python for loop\n",
+    "\n",
+    "### 2. Solve this using no loops and only numpy functions"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 122,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "[2, 5]"
+      ]
+     },
+     "execution_count": 122,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "'''Exercise 7.1\n",
+    "finding peaks with for loop function'''\n",
+    "\n",
+    "import numpy as np\n",
+    "\n",
+    "a = np.array([1, 3, 7, 1, 2, 6, 0, 1])\n",
+    "\n",
+    "def peaks(arr):\n",
+    "    peak_indices = []\n",
+    "    for i in range(1, len(arr)-1):\n",
+    "        if a[i] > a[i-1] and a[i] > a[i+1]:\n",
+    "            peak_indices.append(i)\n",
+    "    return peak_indices\n",
+    "\n",
+    "peaks([1, 3, 7, 1, 2, 6, 0, 1])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 81,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "(array([2, 5]),)"
+      ]
+     },
+     "execution_count": 81,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "'''STRETCH:\n",
+    "Exercise 7.2\n",
+    "finding peaks with numpy functions only'''\n",
+    "\n",
+    "import numpy as np\n",
+    "\n",
+    "a = np.array([1, 3, 7, 1, 2, 6, 0, 1])\n",
+    "\n",
+    "b = np.diff(a)\n",
+    "\n",
+    "c = np.sign(b)\n",
+    "\n",
+    "d = np.diff(c)\n",
+    "\n",
+    "e = np.zeros(a.size)\n",
+    "\n",
+    "f = np.insert(e,1, d)\n",
+    "g = np.where(f == -2) # output should be array([2, 5])\n",
+    "g"
+   ]
+  }
+ ],
+ "metadata": {
+  "date": 1597540028.6350708,
+  "filename": "numpy.rst",
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.8.3"
+  },
+  "next_doc": {
+   "link": "matplotlib",
+   "title": "Matplotlib"
+  },
+  "prev_doc": {
+   "link": "need_for_speed",
+   "title": "Python for Scientific Computing"
+  },
+  "title": "NumPy"
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}
