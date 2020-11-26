@@ -183,9 +183,9 @@
     "\n",
     "n = np.arange(1, 11)\n",
     "\n",
-    "for rows in range(n_row):\n",
-    "    for cols in range(n_col):\n",
-    "        arr[rows, cols] = len(np.where(arr_copy[rows,] == n[cols])[0])\n",
+    "for j in range(n_row):\n",
+    "    for i in range(n_col):\n",
+    "        arr[j, i] = len(np.where(arr_copy[rows,] == n[cols])[0])\n",
     "        \n",
     "        \n",
     "print(arr) "
@@ -372,21 +372,16 @@
    "execution_count": null,
    "metadata": {},
    "outputs": [],
-   "source": []
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": []
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": []
+   "source": [
+    "# Using no loops and only numpy functions\n",
+    "\n",
+    "import numpy as np\n",
+    "from scipy.signal import find_peaks\n",
+    "\n",
+    "array = np.array([1, 3, 7, 1, 2, 6, 0, 1])\n",
+    "\n",
+    "print(find_peaks(array))"
+   ]
   }
  ],
  "metadata": {
